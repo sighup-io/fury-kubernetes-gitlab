@@ -1,0 +1,51 @@
+---
+
+- name: Add gitlab-runner GPG key
+  apt_key:
+    url: https://packages.gitlab.com/runner/gitlab-runner/gpgkey
+    state: present
+
+- name: Add gitlab-runner repository
+  apt_repository:
+    repo: deb https://packages.gitlab.com/runner/gitlab-runner/ubuntu/ bionic main
+    filename: gitlab-runner
+    state: present
+
+- name: Configure APT pinning for gitlab-runner
+  copy:
+    src: gitlab-runner.pref
+    dest: /etc/apt/preferences.d/gitlab-runner.pref
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install gitlab-runner
+  apt:
+    name: gitlab-runner
+    state: present
+
+- name: Register gitlab-runner
+  shell: |
+    gitlab-runner register --non-interactive \
+      {{ gitlab_runner_options }} \
+      --name {{ gitlab_runner_name }} \
+      --url {{ gitlab_runner_url }} \
+      --registration-token {{ gitlab_runner_token }} && \
+    date +%Y%m%d%H%M%S > /etc/gitlab-runner-registered
+  args:
+    creates: /etc/gitlab-runner-registered
+
+- name: Add gitlab-runner user to groups
+  user:
+    name: gitlab-runner
+    groups: "{{ item }}"
+    append: yes
+    state: present
+  with_items: "{{ gitlab_runner_groups }}"
+
+- name: Add cronjob to prune old docker images
+  cron:
+    name: docker-image-prune
+    job: "/usr/bin/docker image prune --filter='until=120h' -a -f 1>> /var/log/docker-cleanup.log 2>> /var/log/error-docker-cleanup.log"
+    special_time: daily
+    state: present

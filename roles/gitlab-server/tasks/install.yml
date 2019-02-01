@@ -1,0 +1,23 @@
+---
+- name: Install required packages
+  become: true
+  package: 
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - openssh-server
+  - ca-certificates
+
+- name: Fetching installation script
+  shell: cd /tmp && curl -LO https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh
+
+- name: Running installation script
+  become: true
+  shell: chmod +x /tmp/script.deb.sh && /tmp/script.deb.sh
+
+- name: Installing Gitlab
+  become: true
+  apt: 
+    name: gitlab-ce={{ gitlab_version }}
+    update_cache: yes
+    state: present

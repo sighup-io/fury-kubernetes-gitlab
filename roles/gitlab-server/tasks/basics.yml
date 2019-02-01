@@ -1,0 +1,19 @@
+---
+- name: Installing timezone data
+  become: true
+  package: 
+    name: tzdata
+    state: present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Configuring Timezone
+  become: true
+  file:
+    state: link
+    src: /usr/share/zoneinfo/Europe/Rome
+    dest: /etc/localtime
+
+- name: Reconfiguring tzdata
+  debconf:
+    name: tzdata

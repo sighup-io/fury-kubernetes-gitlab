@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlab-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: gitlab-runner
+  template:
+    metadata:
+      labels:
+        name: gitlab-runner
+    spec:
+      serviceAccountName: gitlab-runner
+      containers:
+      - image: quay.io/sighup/gitlab-runner-kubectl:v11.7.0_v1.13.2
+        command:
+        - "/bin/sh"
+        - "-c"
+        - "gitlab-runner run"
+        imagePullPolicy: Always
+        name: gitlab-runner
+        volumeMounts:
+        - name: runner-config
+          mountPath: /etc/gitlab-runner
+        resources:
+          limits:
+            cpu: 50m
+            memory: 32Mi
+          requests:
+            cpu: 50m
+            memory: 32Mi
+      restartPolicy: Always
+      volumes:
+      - name: runner-config
+        secret:
+          secretName: runner-config

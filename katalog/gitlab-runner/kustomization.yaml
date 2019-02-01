@@ -1,0 +1,11 @@
+
+resources:
+- job.yml
+- deploy.yml
+- rbac.yml
+
+secretGenerator:
+- envCommand: cat gitlab.env
+  name: gitlab-registration
+  type: Opaque
+

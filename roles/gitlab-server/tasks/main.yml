@@ -1,0 +1,5 @@
+---
+- import_tasks: basics.yml
+- import_tasks: install.yml
+- import_tasks: backups.yml
+- import_tasks: configure.yml

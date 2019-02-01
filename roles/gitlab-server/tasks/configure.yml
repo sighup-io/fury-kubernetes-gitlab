@@ -1,0 +1,12 @@
+---
+- name: Gitlab conf file
+  become: true
+  template:
+    src: gitlab/gitlab.rb
+    dest: /etc/gitlab/
+  register: gitlabfile
+
+- name: Gitlab reconfigure
+  become: true
+  shell: gitlab-ctl reconfigure
+  when: gitlabfile.changed

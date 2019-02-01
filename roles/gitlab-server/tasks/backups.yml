@@ -1,0 +1,7 @@
+---
+- name: Daily backups
+  cron:
+    name: "backup gitlab"
+    minute: "0"
+    hour: "2"
+    job: "/opt/gitlab/bin/gitlab-rake gitlab:backup:create CRON=1"

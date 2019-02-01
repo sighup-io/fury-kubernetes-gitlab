@@ -1,0 +1,7 @@
+---
+
+gitlab_runner_name: "{{ ansible_facts['nodename'] }}"
+gitlab_runner_options: ""
+gitlab_runner_url: ""
+gitlab_runner_token: ""
+gitlab_runner_groups: []

@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name:  runner-registration
+spec:
+  template:
+    metadata:
+      name: runner-registration
+    spec:
+      restartPolicy: Never  
+      serviceAccountName: gitlab-runner
+      containers:
+      - image: quay.io/sighup/gitlab-runner-kubectl:v11.7.0_v1.13.2
+        command:
+        - "/bin/sh"
+        - "-c"
+        - "gitlab-runner register && kubectl create secret generic runner-config --from-file=/etc/gitlab-runner/config.toml"
+        name: gitlab-runner
+        env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: RUNNER_NAME
+          value: $(KUBERNETES_NAMESPACE)
+        - name: RUNNER_TAG_LIST
+          value: $(KUBERNETES_NAMESPACE),deployer,k8s
+        - name: KUBERNETES_SERVICE_ACCOUNT
+          value: gitlab-runner
+        envFrom:
+          - secretRef:
+              name: gitlab-registration

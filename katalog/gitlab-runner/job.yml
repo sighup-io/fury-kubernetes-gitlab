@@ -7,7 +7,7 @@ spec:
     metadata:
       name: runner-registration
     spec:
-      restartPolicy: Never  
+      restartPolicy: Never
       serviceAccountName: gitlab-runner
       containers:
       - image: quay.io/sighup/gitlab-runner-kubectl:v11.7.0_v1.13.2
@@ -22,10 +22,6 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-        - name: RUNNER_NAME
-          value: $(KUBERNETES_NAMESPACE)
-        - name: RUNNER_TAG_LIST
-          value: $(KUBERNETES_NAMESPACE),deployer,k8s
         - name: KUBERNETES_SERVICE_ACCOUNT
           value: gitlab-runner
         envFrom:

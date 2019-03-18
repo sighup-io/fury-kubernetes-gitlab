@@ -29,3 +29,6 @@ rules:
 - apiGroups: [""]
   resources: ["pods/exec","pods/logs","secrets", "pods", "pods/portforward", "configmaps"]
   verbs: ["create", "delete"]
+- apiGroups: ["monitoring.coreos.com"]
+  resources: ["prometheusrules", "servicemonitors"]
+  verbs: ["get", "list", "watch", "patch", "create", "delete"]

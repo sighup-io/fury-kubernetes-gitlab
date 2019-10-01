@@ -1443,7 +1443,7 @@ prometheus_monitoring['enable'] = false
 ################################################################################
 # Let's Encrypt integration
 ################################################################################
-letsencrypt['enable'] = true
+letsencrypt['enable'] = {{ letsencrypt.enable }}
 letsencrypt['contact_emails'] = ['engineering@sighup.io'] # This should be an array of email addresses to add as contacts
 # letsencrypt['group'] = 'root'
 # letsencrypt['key_size'] = 2048

@@ -6,7 +6,7 @@ playbook.yml
 ```yaml
 - hosts: gitlab example
   roles:
-    - role: gitlab
+    - role: gitlab/gitlab-server
       display_name: 'Example'
       external_url: 'https://git.example.io'
       gitlab_version: 11.7.0-ce.0
@@ -31,4 +31,6 @@ playbook.yml
         password: "example-password"
         domain: "example.io"
         auth: "plain"
+      letsencrypt:
+        enable: true
 ```

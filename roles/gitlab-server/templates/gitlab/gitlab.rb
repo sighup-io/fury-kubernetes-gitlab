@@ -304,14 +304,14 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@sighup.io'
 # gitlab_rails['backup_pg_schema'] = 'public'
 
 ###! The duration in seconds to keep backups before they are allowed to be deleted
-gitlab_rails['backup_keep_time'] = 604800
+gitlab_rails['backup_keep_time'] = {{ backup.backup_keep_time }}
 
 gitlab_rails['backup_upload_connection'] = {
-  'provider' => 'AWS',
-  'region' => 'us-east-1',
-  'aws_access_key_id' => '------',
-  'aws_secret_access_key' => '------',
-  'endpoint' => 'https://s3.wasabisys.com',
+  'provider' => '{{ backup.provider }}',
+  'region' => '{{ backup.region }}',
+  'aws_access_key_id' => '{{ backup.aws_access_key_id }}',
+  'aws_secret_access_key' => '{{ backup.aws_secret_access_key }}',
+  #'endpoint' => 'https://s3.wasabisys.com',
 }
 gitlab_rails['backup_upload_remote_directory'] = '{{ backup.bucket }}'
 # gitlab_rails['backup_multipart_chunk_size'] = 104857600

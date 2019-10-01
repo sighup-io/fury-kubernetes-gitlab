@@ -13,7 +13,12 @@ playbook.yml
       git:
         folder: '/mnt/data/repo'
       backup:
-        bucket: 'gitlab-example-backups'
+        backup_keep_time: 604800
+        provider: 'AWS'
+        region: '<your-region>'
+        aws_access_key_id: '<your-access-key-id>'
+        aws_secret_access_key: '<your-secret-access-key>'
+        bucket: 'gitlab-exmple-backups'
       registry:
         url: 'https://reg.example.io'
         host: reg.example.io

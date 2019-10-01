@@ -476,7 +476,7 @@ gitlab_rails['smtp_port'] = {{ smtp.port }}
 gitlab_rails['smtp_user_name'] = "{{ smtp.username }}"
 gitlab_rails['smtp_password'] = "{{ smtp.password }}"
 gitlab_rails['smtp_domain'] = "{{ smtp.domain }}"
-gitlab_rails['smtp_authentication'] = "{{ smtp.auth }}"
+gitlab_rails['smtp_authentication'] = "{{ smtp.auth | lower }}"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 # gitlab_rails['smtp_tls'] = false
 
@@ -1443,7 +1443,7 @@ prometheus_monitoring['enable'] = false
 ################################################################################
 # Let's Encrypt integration
 ################################################################################
-letsencrypt['enable'] = {{ letsencrypt.enable }}
+letsencrypt['enable'] = {{ letsencrypt.enable | lower }}
 letsencrypt['contact_emails'] = ['engineering@sighup.io'] # This should be an array of email addresses to add as contacts
 # letsencrypt['group'] = 'root'
 # letsencrypt['key_size'] = 2048

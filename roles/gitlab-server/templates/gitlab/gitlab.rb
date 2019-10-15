@@ -492,10 +492,12 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 ##! Docs: https://docs.gitlab.com/ce/administration/container_registry.html
 ################################################################################
 
-registry_external_url '{{ registry.url }}'
+{% if registry.enable  %}
+registry_external_url "{{ registry.url }}"
+{% endif %}
 
 ### Settings used by GitLab application
-gitlab_rails['registry_enabled'] = true
+gitlab_rails['registry_enabled'] = '{{ registry.enable  | lower }}'
 # gitlab_rails['registry_host'] = "{{ registry.host }}"
 # gitlab_rails['registry_port'] = "{{ registry.port }}"
 # gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"

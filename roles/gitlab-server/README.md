@@ -20,6 +20,7 @@ playbook.yml
         aws_secret_access_key: '<your-secret-access-key>'
         bucket: 'gitlab-exmple-backups'
       registry:
+	enable: true
         url: 'https://reg.example.io'
         host: reg.example.io
         port: 5000

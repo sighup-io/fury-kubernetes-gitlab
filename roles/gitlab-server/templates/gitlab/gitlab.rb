@@ -226,25 +226,26 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@sighup.io'
 ###! **Be careful not to break the indentation in the ldap_servers block. It is
 ###!   in yaml format and the spaces must be retained. Using tabs will not work.**
 
-# gitlab_rails['ldap_enabled'] = false
+{% if ldap.enable  %}
+gitlab_rails['ldap_enabled'] = {{ ldap.enable | lower }}
 
 ###! **remember to close this block with 'EOS' below**
-# gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
-#   main: # 'main' is the GitLab 'provider ID' of this LDAP server
-#     label: 'LDAP'
-#     host: '_your_ldap_server'
-#     port: 389
-#     uid: 'sAMAccountName'
-#     bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
-#     password: '_the_password_of_the_bind_user'
-#     encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
+gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
+  main: # 'main' is the GitLab 'provider ID' of this LDAP server
+    label: '{{ ldap.label }}'
+    host: '{{ ldap.host }}'
+    port: {{ ldap.port }}
+    uid: '{{ ldap.uid }}'
+    bind_dn: '{{ ldap.bind_dn }}'
+    password: '{{ ldap.password }}'
+    encryption: '{{ ldap.encryption }}' # "start_tls" or "simple_tls" or "plain"
 #     verify_certificates: true
 #     active_directory: true
 #     allow_username_or_email_login: false
 #     lowercase_usernames: false
 #     block_auto_created_users: false
-#     base: ''
-#     user_filter: ''
+    base: ' {{ ldap.base }}'
+    user_filter: '{{ ldap.user_filter }}'
 #     ## EE only
 #     group_base: ''
 #     admin_group: ''
@@ -269,7 +270,9 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@sighup.io'
 #     group_base: ''
 #     admin_group: ''
 #     sync_ssh_keys: false
-# EOS
+EOS
+
+{% endif %}
 
 ### OmniAuth Settings
 ###! Docs: https://docs.gitlab.com/ce/integration/omniauth.html

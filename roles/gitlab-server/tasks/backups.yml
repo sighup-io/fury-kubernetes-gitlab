@@ -1,5 +1,6 @@
 ---
 - name: Daily backups
+  become: true
   cron:
     name: "backup gitlab"
     minute: "0"

@@ -19,6 +19,9 @@ playbook.yml
         aws_access_key_id: '<your-access-key-id>'
         aws_secret_access_key: '<your-secret-access-key>'
         bucket: 'gitlab-exmple-backups'
+        endpoint: '<endpoint-bucket-cloud-provider>'
+        path_style: 'true'
+        enable_signature_v4_streaming: 'false'
       ldap:
         enable: true
         label: 'LDAP'

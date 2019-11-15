@@ -314,7 +314,11 @@ gitlab_rails['backup_upload_connection'] = {
   'region' => '{{ backup.region }}',
   'aws_access_key_id' => '{{ backup.aws_access_key_id }}',
   'aws_secret_access_key' => '{{ backup.aws_secret_access_key }}',
-  #'endpoint' => 'https://s3.wasabisys.com',
+  {% if backup.endpoint %}
+  'endpoint' => '{{ backup.endpoint }}',
+  'path_style' => '{{ backup.path_style }}',
+  'enable_signature_v4_streaming' => '{{ backup.enable_signature_v4_streaming }}',
+  {% endif %}
 }
 gitlab_rails['backup_upload_remote_directory'] = '{{ backup.bucket }}'
 # gitlab_rails['backup_multipart_chunk_size'] = 104857600

@@ -226,25 +226,26 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@sighup.io'
 ###! **Be careful not to break the indentation in the ldap_servers block. It is
 ###!   in yaml format and the spaces must be retained. Using tabs will not work.**
 
-# gitlab_rails['ldap_enabled'] = false
+{% if ldap.enable  %}
+gitlab_rails['ldap_enabled'] = {{ ldap.enable | lower }}
 
 ###! **remember to close this block with 'EOS' below**
-# gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
-#   main: # 'main' is the GitLab 'provider ID' of this LDAP server
-#     label: 'LDAP'
-#     host: '_your_ldap_server'
-#     port: 389
-#     uid: 'sAMAccountName'
-#     bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
-#     password: '_the_password_of_the_bind_user'
-#     encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
+gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
+  main: # 'main' is the GitLab 'provider ID' of this LDAP server
+    label: '{{ ldap.label }}'
+    host: '{{ ldap.host }}'
+    port: {{ ldap.port }}
+    uid: '{{ ldap.uid }}'
+    bind_dn: '{{ ldap.bind_dn }}'
+    password: '{{ ldap.password }}'
+    encryption: '{{ ldap.encryption }}' # "start_tls" or "simple_tls" or "plain"
 #     verify_certificates: true
 #     active_directory: true
 #     allow_username_or_email_login: false
 #     lowercase_usernames: false
 #     block_auto_created_users: false
-#     base: ''
-#     user_filter: ''
+    base: ' {{ ldap.base }}'
+    user_filter: '{{ ldap.user_filter }}'
 #     ## EE only
 #     group_base: ''
 #     admin_group: ''
@@ -269,7 +270,9 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@sighup.io'
 #     group_base: ''
 #     admin_group: ''
 #     sync_ssh_keys: false
-# EOS
+EOS
+
+{% endif %}
 
 ### OmniAuth Settings
 ###! Docs: https://docs.gitlab.com/ce/integration/omniauth.html
@@ -304,14 +307,18 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@sighup.io'
 # gitlab_rails['backup_pg_schema'] = 'public'
 
 ###! The duration in seconds to keep backups before they are allowed to be deleted
-gitlab_rails['backup_keep_time'] = 604800
+gitlab_rails['backup_keep_time'] = {{ backup.backup_keep_time }}
 
 gitlab_rails['backup_upload_connection'] = {
-  'provider' => 'AWS',
-  'region' => 'us-east-1',
-  'aws_access_key_id' => '------',
-  'aws_secret_access_key' => '------',
-  'endpoint' => 'https://s3.wasabisys.com',
+  'provider' => '{{ backup.provider }}',
+  'region' => '{{ backup.region }}',
+  'aws_access_key_id' => '{{ backup.aws_access_key_id }}',
+  'aws_secret_access_key' => '{{ backup.aws_secret_access_key }}',
+  {% if backup.endpoint %}
+  'endpoint' => '{{ backup.endpoint }}',
+  'path_style' => '{{ backup.path_style }}',
+  'enable_signature_v4_streaming' => '{{ backup.enable_signature_v4_streaming }}',
+  {% endif %}
 }
 gitlab_rails['backup_upload_remote_directory'] = '{{ backup.bucket }}'
 # gitlab_rails['backup_multipart_chunk_size'] = 104857600
@@ -476,7 +483,7 @@ gitlab_rails['smtp_port'] = {{ smtp.port }}
 gitlab_rails['smtp_user_name'] = "{{ smtp.username }}"
 gitlab_rails['smtp_password'] = "{{ smtp.password }}"
 gitlab_rails['smtp_domain'] = "{{ smtp.domain }}"
-gitlab_rails['smtp_authentication'] = "{{ smtp.auth }}"
+gitlab_rails['smtp_authentication'] = "{{ smtp.auth | lower }}"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 # gitlab_rails['smtp_tls'] = false
 
@@ -492,10 +499,12 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 ##! Docs: https://docs.gitlab.com/ce/administration/container_registry.html
 ################################################################################
 
-registry_external_url '{{ registry.url }}'
+{% if registry.enable  %}
+registry_external_url "{{ registry.url }}"
+{% endif %}
 
 ### Settings used by GitLab application
-gitlab_rails['registry_enabled'] = true
+gitlab_rails['registry_enabled'] = '{{ registry.enable  | lower }}'
 # gitlab_rails['registry_host'] = "{{ registry.host }}"
 # gitlab_rails['registry_port'] = "{{ registry.port }}"
 # gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
@@ -1443,7 +1452,7 @@ prometheus_monitoring['enable'] = false
 ################################################################################
 # Let's Encrypt integration
 ################################################################################
-letsencrypt['enable'] = true
+letsencrypt['enable'] = {{ letsencrypt.enable | lower }}
 letsencrypt['contact_emails'] = ['engineering@sighup.io'] # This should be an array of email addresses to add as contacts
 # letsencrypt['group'] = 'root'
 # letsencrypt['key_size'] = 2048

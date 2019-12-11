@@ -5,3 +5,4 @@ gitlab_runner_options: ""
 gitlab_runner_url: ""
 gitlab_runner_token: ""
 gitlab_runner_groups: []
+gitlab_runner_version: "12.5.0"

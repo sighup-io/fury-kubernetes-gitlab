@@ -21,7 +21,7 @@
 
 - name: Install gitlab-runner
   apt:
-    name: gitlab-runner
+    name: gitlab-runner={{ gitlab_runner_version }}
     state: present
 
 - name: Register gitlab-runner

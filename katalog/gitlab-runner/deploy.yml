@@ -14,7 +14,7 @@ spec:
     spec:
       serviceAccountName: gitlab-runner
       containers:
-      - image: quay.io/sighup/gitlab-runner-kubectl:v11.7.0_v1.13.2
+      - image: quay.io/sighup/gitlab-runner-kubectl
         command:
         - "/bin/sh"
         - "-c"

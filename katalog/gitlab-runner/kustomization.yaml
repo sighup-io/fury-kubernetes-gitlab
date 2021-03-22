@@ -1,11 +1,15 @@
-
 resources:
-- job.yml
-- deploy.yml
-- rbac.yml
+  - job.yml
+  - deploy.yml
+  - rbac.yml
 
 secretGenerator:
-- envCommand: cat gitlab.env
-  name: gitlab-registration
-  type: Opaque
+  - name: gitlab-registration
+    envs:
+      - gitlab.env
+    type: Opaque
 
+images:
+  - name: quay.io/sighup/gitlab-runner-kubectl
+    newName: quay.io/sighup/gitlab-runner-kubectl
+    newTag: v12.10.2_v1.18.2
